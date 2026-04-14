@@ -1,10 +1,10 @@
 from PIL import Image
 
 img = Image.open("output.png").convert('RGB')
-block_image = 15  # Must match your encoder
+block_image = 15  
 decoded_msg = ""
 
-# 1. Find the first block
+#1. Find the first block
 found_x, found_y = -1, -1
 
 for y in range(img.height):
@@ -20,18 +20,18 @@ if found_x == -1:
     exit()
 
 
-start_x = found_x + (BLOCK_SIZE // 2)
-start_y = found_y + (BLOCK_SIZE // 2)
+start_x = found_x + (block_size // 2)
+start_y = found_y + (block_size // 2)
 
 print(f"Calibrated center of first block: {start_x}, {start_y}")
 
-# 2. Loop to go through the blocks
+#2. Loop to go through the blocks
 last_chunk = "" # Track the previous 3 characters
 
 for row in range(50): 
     for col in range(20): 
-        pixel_x = start_x + (col * BLOCK_SIZE)
-        pixel_y = start_y + (row * BLOCK_SIZE)
+        pixel_x = start_x + (col * block_size)
+        pixel_y = start_y + (row * block_size)
         
         if pixel_x < img.width and pixel_y < img.height:
             r, g, b = img.getpixel((pixel_x, pixel_y))
@@ -44,7 +44,7 @@ for row in range(50):
                 c1, c2, c3 = chr(r), chr(g), chr(b)
                 current_chunk = c1 + c2 + c3
                 
-                # SAFETY CHECK: Only add if it's not a duplicate of the last block
+                # Safety check: Only add to the decoded message if it's not a duplicate of the last block
                 if current_chunk != last_chunk:
                     decoded_msg += current_chunk
                     last_chunk = current_chunk # Update the tracker
