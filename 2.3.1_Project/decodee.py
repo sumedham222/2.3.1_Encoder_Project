@@ -1,10 +1,10 @@
 from PIL import Image
 
 img = Image.open("output.png").convert('RGB')
-BLOCK_SIZE = 15  # Must match your encoder
+block_image = 15  # Must match your encoder
 decoded_msg = ""
 
-# 1. FIND THE FIRST BLOCK (Improved)
+# 1. Find the first block
 found_x, found_y = -1, -1
 
 for y in range(img.height):
@@ -19,13 +19,13 @@ if found_x == -1:
     print("No blocks found.")
     exit()
 
-# NEW STEP: Instead of using the corner, we aim for the center of the first block
+
 start_x = found_x + (BLOCK_SIZE // 2)
 start_y = found_y + (BLOCK_SIZE // 2)
 
 print(f"Calibrated center of first block: {start_x}, {start_y}")
 
-# 2. THE SCANNING LOOP
+# 2. Loop to go through the blocks
 last_chunk = "" # Track the previous 3 characters
 
 for row in range(50): 
